@@ -62,7 +62,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     private Cocos2dxGLSurfaceView mGLSurfaceView = null;
     private int[] mGLContextAttrs = null;
     private Cocos2dxHandler mHandler = null;   
-    private static Cocos2dxActivity sContext = null;
+    private static Activity sContext = null;  // 这里原来写死了是 Cocos2dxActivity !!!
     private Cocos2dxVideoHelper mVideoHelper = null;
     private Cocos2dxWebViewHelper mWebViewHelper = null;
     private Cocos2dxEditBoxHelper mEditBoxHelper = null;
@@ -71,6 +71,11 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 
     public Cocos2dxGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
+    }
+
+    // 新加一个可以设置 Context 的方法
+    public static void setContext(Activity activity) {
+        sContext = activity;
     }
 
     public static Context getContext() {
@@ -154,7 +159,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     }
 
     //native method,call GLViewImpl::getGLContextAttrs() to get the OpenGL ES context attributions
-    private static native int[] getGLContextAttrs();
+    public static native int[] getGLContextAttrs();
 
     // ===========================================================
     // Getter & Setter
@@ -341,7 +346,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     // Inner and Anonymous Classes
     // ===========================================================
 
-    private class Cocos2dxEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
+    static public class Cocos2dxEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
     {
         private int[] mConfigAttributes;
         private  final int EGL_OPENGL_ES2_BIT = 0x04;
