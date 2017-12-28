@@ -81,7 +81,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     public static Context getContext() {
         return sContext;
     }
-    
+
+    @Override
     public void setKeepScreenOn(boolean value) {
         final boolean newValue = value;
         runOnUiThread(new Runnable() {

@@ -28,7 +28,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
 
-class Cocos2dxAudioFocusManager {
+public class Cocos2dxAudioFocusManager {
 
     private final static String TAG = "AudioFocusManager";
     // Audio focus values synchronized with which in cocos/platform/android/javaactivity-android.cpp
@@ -90,7 +90,7 @@ class Cocos2dxAudioFocusManager {
                 }
             };
 
-    static boolean registerAudioFocusListener(Context context) {
+    public static boolean registerAudioFocusListener(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         // Request audio focus for playback
@@ -109,7 +109,7 @@ class Cocos2dxAudioFocusManager {
         return false;
     }
 
-    static void unregisterAudioFocusListener(Context context) {
+    public static void unregisterAudioFocusListener(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         int result = am.abandonAudioFocus(sAfChangeListener);
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {

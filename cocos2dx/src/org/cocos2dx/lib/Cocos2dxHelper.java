@@ -106,7 +106,7 @@ public class Cocos2dxHelper {
     // ===========================================================
 
     public static void runOnGLThread(final Runnable r) {
-        ((Cocos2dxActivity)sActivity).runOnGLThread(r);
+        ((Cocos2dxHelperListener)sActivity).runOnGLThread(r);
     }
 
     private static boolean sInited = false;
@@ -694,6 +694,8 @@ public class Cocos2dxHelper {
         public void showDialog(final String pTitle, final String pMessage);
 
         public void runOnGLThread(final Runnable pRunnable);
+
+        public void setKeepScreenOn(boolean value);
     }
 
     //Enhance API modification begin

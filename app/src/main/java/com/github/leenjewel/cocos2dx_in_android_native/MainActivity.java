@@ -1,11 +1,14 @@
 package com.github.leenjewel.cocos2dx_in_android_native;
 
 import android.graphics.PixelFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.Cocos2dxAudioFocusManager;
+import org.cocos2dx.lib.Cocos2dxEngineDataManager;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.cocos2dx.lib.Cocos2dxHelper;
 import org.cocos2dx.lib.Cocos2dxRenderer;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements Cocos2dxHelper.Co
         this.mGLSurfaceView.setEGLConfigChooser(chooser);
         this.mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
         this.mGLSurfaceView.setZOrderOnTop(true);
+
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        Cocos2dxEngineDataManager.init(this, mGLSurfaceView);
     }
 
     @Override
@@ -63,5 +70,41 @@ public class MainActivity extends AppCompatActivity implements Cocos2dxHelper.Co
     @Override
     public void runOnGLThread(Runnable pRunnable) {
         this.mGLSurfaceView.queueEvent(pRunnable);
+    }
+
+    @Override
+    public void setKeepScreenOn(boolean value) {
+        final boolean newValue = value;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mGLSurfaceView.setKeepScreenOn(newValue);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Cocos2dxAudioFocusManager.registerAudioFocusListener(this);
+        Cocos2dxHelper.onResume();
+        mGLSurfaceView.onResume();
+        Cocos2dxEngineDataManager.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
+        Cocos2dxHelper.onPause();
+        mGLSurfaceView.onPause();
+        Cocos2dxEngineDataManager.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Cocos2dxAudioFocusManager.unregisterAudioFocusListener(this);
+        super.onDestroy();
+        Cocos2dxEngineDataManager.destroy();
     }
 }
